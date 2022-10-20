@@ -27,7 +27,18 @@ CREATE TABLE Administrator (
 -- TREATMENT INFO
 CREATE TABLE OrderTreatment (
     order_treatment_id VARCHAR(10) PRIMARY KEY, 
-    is_medication bool
+    is_medication bool,
+	timestamp timestamp NOT NULL,
+    primary_doctor_id VARCHAR(10) NOT NULL,
+    FOREIGN KEY (primary_doctor_id) REFERENCES Primary_Doctor(primary_doctor_id)
+);
+CREATE TABLE PerformTreatment (
+    perform_treatment_id VARCHAR(10) PRIMARY KEY, 
+    timestamp timestamp NOT NULL,
+    employee_id VARCHAR(10) NOT NULL,
+    order_treatment_id VARCHAR(10) NOT NULL,
+    FOREIGN KEY (employee_id) REFERENCES Employee(employee_id),
+    FOREIGN KEY (order_treatment_id) REFERENCES OrderTreatment(order_treatment_id)
 );
 CREATE TABLE Administer_Treatment (
     administer_treatment_id VARCHAR(10) PRIMARY KEY,
