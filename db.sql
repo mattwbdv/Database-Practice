@@ -9,19 +9,19 @@ CREATE TABLE Nurse (
 );
 CREATE TABLE Technician (
     technician_id VARCHAR(10) PRIMARY KEY, 
-	CONSTRAINT C2 FOREIGN KEY(technician_id) REFERENCES Employee(employee_id)
+	CONSTRAINT C3 FOREIGN KEY(technician_id) REFERENCES Employee(employee_id)
 );
 CREATE TABLE Doctor (
     doctor_id VARCHAR(10) PRIMARY KEY, 
-	CONSTRAINT C2 FOREIGN KEY(doctor_id) REFERENCES Employee(employee_id)
+	CONSTRAINT C4 FOREIGN KEY(doctor_id) REFERENCES Employee(employee_id)
 );
 CREATE TABLE Primary_Doctor (
 	primary_doctor_id VARCHAR(10) PRIMARY KEY, 
-	CONSTRAINT C2 FOREIGN KEY(primary_doctor_id) REFERENCES Doctor(doctor_id)
+	CONSTRAINT C5 FOREIGN KEY(primary_doctor_id) REFERENCES Doctor(doctor_id)
 );
 CREATE TABLE Administrator (
     administrator_id VARCHAR(10) PRIMARY KEY, 
-	CONSTRAINT C2 FOREIGN KEY(administrator_id) REFERENCES Employee(employee_id)
+	CONSTRAINT C6 FOREIGN KEY(administrator_id) REFERENCES Employee(employee_id)
 );
 
 -- TREATMENT INFO
@@ -123,4 +123,3 @@ CREATE TABLE Room (
     check (room_num between 1 and 20), 
     occupied bool
 );
-
