@@ -38,6 +38,7 @@ SELECT p.patient_id AS "Patient ID", p.name AS "Patient Name"
 FROM Patient_Discharged pd
 LEFT JOIN Patient p 
 ON pd.patient_id = p.patient_id
+-- GIVEN DATE RANGE 
 WHERE pd.timestamp BETWEEN '2022-02-01 00:00:00' AND '2022-10-01 00:00:00';
 
 -- 2.4
@@ -45,10 +46,40 @@ SELECT p.patient_id AS "Patient ID", p.name AS "Patient Name"
 FROM Patient_Admitted pd
 LEFT JOIN Patient p 
 ON pd.patient_id = p.patient_id
+-- GIVEN DATE RANGE 
 WHERE pd.timestamp BETWEEN '2011-01-01 00:00:00' AND '2015-01-01 00:00:00';
 
 -- 2.5
+SELECT pa.timestamp as "Admitted Timestamp", pa.diagnosis as "Diagnosis" 
+FROM Patient_Admitted pa
+-- GIVEN PATIENT ID or NAME 
+WHERE pa.patient_id = 1
 
+-- 2.6 
+
+-- 2.7 
+
+-- 2.8 
+
+-- 3.1
+
+-- 3.2
+
+-- 3.3
+
+-- 3.4
+
+-- 3.5
+
+-- 4.1
+
+-- 4.2
+
+-- 4.3
+
+-- 4.4
+
+-- 4.5
 
 
 
