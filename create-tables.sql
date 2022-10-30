@@ -44,6 +44,7 @@ CREATE TABLE Patient (
     emergency_contact_id VARCHAR(10), 
 	order_treatment_id VARCHAR(10),
     administer_treatment_id VARCHAR(10),
+    name VARCHAR(10),
     FOREIGN KEY (emergency_contact_id) REFERENCES Emergency_Contact(emergency_contact_id) 
  );
 CREATE TABLE Patient_Admitted (
@@ -54,6 +55,7 @@ CREATE TABLE Patient_Admitted (
 	administrator_id VARCHAR(10), 
     primary_doctor_id VARCHAR(10),
     diagnosis VARCHAR(50),
+    diagnosis_id VARCHAR(10),
 	insurance_id VARCHAR(10), 
     FOREIGN KEY (insurance_id) REFERENCES Insurance(insurance_id), 
 	FOREIGN KEY (room_id) REFERENCES Room(room_id), 
