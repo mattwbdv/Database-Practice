@@ -53,17 +53,39 @@ WHERE pd.timestamp BETWEEN '2011-01-01 00:00:00' AND '2015-01-01 00:00:00';
 SELECT pa.timestamp as "Admitted Timestamp", pa.diagnosis as "Diagnosis" 
 FROM Patient_Admitted pa
 -- GIVEN PATIENT ID or NAME 
-WHERE pa.patient_id = 1
+WHERE pa.patient_id = 1;
 
+
+-- Fixing SQL Mode
+SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
 -- 2.6 
+SELECT * 
+FROM administer_treatment t
+LEFT JOIN Patient_Admitted pa
+ON t.admit_id = pa.admit_id
+WHERE pa.patient_id = 1
+-- GROUP BY pa.admit_id
+ORDER BY t.admit_id DESC, t.treatment_id ASC;
+
 
 -- 2.7 
 
 -- 2.8 
 
 -- 3.1
+-- NOTE: I did not use diagnosis ID number in my tables, so I did not provide this ID
+SELECT pa.admit_id, pa.diagnosis as "Diagnosis Name", count(pa.diagnosis) as "Times Occured"
+FROM Patient_Admitted pa
+WHERE pa.admit_id NOT IN (SELECT admit_id FROM Patient_Discharged)
+GROUP BY diagnosis
+ORDER BY count(diagnosis) DESC;
 
 -- 3.2
+-- NOTE: I did not use diagnosis ID number in my tables, so I did not provide this ID
+SELECT pa.admit_id, pa.diagnosis as "Diagnosis Name", count(pa.diagnosis) as "Times Occured"
+FROM Patient_Admitted pa
+GROUP BY diagnosis
+ORDER BY count(diagnosis) DESC
 
 -- 3.3
 
