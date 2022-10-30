@@ -73,16 +73,16 @@ INSERT INTO `hospital`.`room` (`room_id`, `room_num`, `occupied`) VALUES ('6', '
 
 
  
-INSERT INTO `hospital`.`patient` (`patient_id`, `emergency_contact_id`) VALUES ('1', '7');
-INSERT INTO `hospital`.`patient` (`patient_id`, `emergency_contact_id`) VALUES ('2', '3');
-INSERT INTO `hospital`.`patient` (`patient_id`, `emergency_contact_id`) VALUES ('3', '4');
+INSERT INTO `hospital`.`patient` (`patient_id`, `emergency_contact_id`, `name`) VALUES ('1', '7', "Steve");
+INSERT INTO `hospital`.`patient` (`patient_id`, `emergency_contact_id`, `name`) VALUES ('2', '3', "Bob");
+INSERT INTO `hospital`.`patient` (`patient_id`, `emergency_contact_id`, `name`) VALUES ('3', '4', "Larry");
 
 
 
  
-INSERT INTO `hospital`.`Patient_Admitted` (`admit_id`, `room_id`, `patient_id`, `timestamp`, `administrator_id`, `primary_doctor_id`, `diagnosis`, `insurance_id`) VALUES ('1', '2', '1', '2013-07-23 13:10:11', '8', '1', 'Broken Arm', '8');
-INSERT INTO `hospital`.`Patient_Admitted` (`admit_id`, `room_id`, `patient_id`, `timestamp`, `administrator_id`, `primary_doctor_id`, `diagnosis`, `insurance_id`) VALUES ('2', '3', '2', '2011-02-13 13:07:11', '9', '2', 'Stomach Illness', '2');
-INSERT INTO `hospital`.`Patient_Admitted` (`admit_id`, `room_id`, `patient_id`, `timestamp`, `administrator_id`, `primary_doctor_id`, `diagnosis`, `insurance_id`) VALUES ('3', '1', '3', '2020-12-13 13:05:11', '9', '3', 'Broken Leg', '5');
+INSERT INTO `hospital`.`Patient_Admitted` (`admit_id`, `room_id`, `patient_id`, `timestamp`, `administrator_id`, `primary_doctor_id`, `diagnosis`, `insurance_id`) VALUES ('1', '2', '1', '2013-07-23 13:10:11', '8', '1', 'Broken Arm', '1', '8');
+INSERT INTO `hospital`.`Patient_Admitted` (`admit_id`, `room_id`, `patient_id`, `timestamp`, `administrator_id`, `primary_doctor_id`, `diagnosis`, `insurance_id`) VALUES ('2', '3', '2', '2011-02-13 13:07:11', '9', '2', 'Stomach Illness', '2', '2');
+INSERT INTO `hospital`.`Patient_Admitted` (`admit_id`, `room_id`, `patient_id`, `timestamp`, `administrator_id`, `primary_doctor_id`, `diagnosis`, `insurance_id`) VALUES ('3', '1', '3', '2020-12-13 13:05:11', '9', '3', 'Broken Leg', '3', '5');
 
 
 
@@ -129,5 +129,7 @@ UPDATE `hospital`.`patient` SET `order_treatment_id` = '2', `administer_treatmen
 UPDATE `hospital`.`patient` SET `order_treatment_id` = '4', `administer_treatment_id` = '3' WHERE (`patient_id` = '2');
 UPDATE `hospital`.`patient` SET `order_treatment_id` = '5', `administer_treatment_id` = '4' WHERE (`patient_id` = '3');
 
-
+-- adding duplicate value for testing 
+INSERT INTO `hospital`.`Patient_Admitted` (`admit_id`, `room_id`, `patient_id`, `timestamp`, `administrator_id`, `primary_doctor_id`, `diagnosis`, `insurance_id`) VALUES ('4', '1', '2', '2005-12-14 13:06:12', '8', '2', 'Broken Arm', '1', '2');
+INSERT INTO `hospital`.`patient_discharged` (`discharge_id`, `admit_id`, `patient_id`, `timestamp`) VALUES ('3', '4', '2', '2006-06-12 10:06:13');
 
