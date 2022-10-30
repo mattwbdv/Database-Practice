@@ -74,7 +74,7 @@ ORDER BY t.admit_id DESC, t.treatment_id ASC;
 
 -- 3.1
 -- NOTE: I did not use diagnosis ID number in my tables, so I did not provide this ID
-SELECT pa.admit_id, pa.diagnosis as "Diagnosis Name", count(pa.diagnosis) as "Times Occured"
+SELECT pa.diagnosis as "Diagnosis Name", count(pa.diagnosis) as "Times Occured"
 FROM Patient_Admitted pa
 WHERE pa.admit_id NOT IN (SELECT admit_id FROM Patient_Discharged)
 GROUP BY diagnosis
@@ -82,22 +82,50 @@ ORDER BY count(diagnosis) DESC;
 
 -- 3.2
 -- NOTE: I did not use diagnosis ID number in my tables, so I did not provide this ID
-SELECT pa.admit_id, pa.diagnosis as "Diagnosis Name", count(pa.diagnosis) as "Times Occured"
+SELECT pa.diagnosis as "Diagnosis Name", count(pa.diagnosis) as "Times Occured"
 FROM Patient_Admitted pa
 GROUP BY diagnosis
-ORDER BY count(diagnosis) DESC
+ORDER BY count(diagnosis) DESC;
 
 -- 3.3
+-- NOTE: I did not use treatment name in my tables, so I did not provide this name (only IDs)
+SELECT pa.treatment_id as "Treatment ID", count(pa.treatment_id) as "Times Administered"
+FROM OrderTreatment pa
+WHERE pa.admit_id NOT IN (SELECT admit_id FROM Patient_Discharged)
+GROUP BY treatment_id
+ORDER BY count(treatment_id) DESC;
 
 -- 3.4
+-- HOW MIGHT I KEEP COUNT OF ADMISSIONS AND USE THAT IN DIAGNOSIS 
+SELECT pa.patient_id as "Patient ID", count(pa.patient_ID) as "Times Admitted", pa.diagnosis 
+FROM Patient_Admitted pa
+GROUP BY pa.patient_id
+HAVING count(patient_id) >= 2;
 
 -- 3.5
 
 -- 4.1
+-- How might I derive job function and add that to the return without adding to the tables themselves?
+SELECT * 
+FROM EMPLOYEE e
+LEFT JOIN DOCTOR d 
+ON e.employee_id = d.doctor_id
+LEFT JOIN NURSE n
+ON e.employee_id = n.nurse_id
+LEFT JOIN technician t
+ON e.employee_id = t.technician_id
+LEFT JOIN administrator a
+ON e.employee_id = a.administrator_id;
 
 -- 4.2
+SELECT pa.primary_doctor_id as "Primary Doctor ID", count(pa.primary_doctor_id) as "Admissions this Year"
+FROM Patient_Admitted pa
+WHERE (NOW() - pa.timestamp) < 31536000
+GROUP BY pa.primary_doctor_id
+HAVING count(pa.primary_doctor_id) >= 4;
 
 -- 4.3
+
 
 -- 4.4
 
