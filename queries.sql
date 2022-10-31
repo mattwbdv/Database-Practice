@@ -96,26 +96,32 @@ GROUP BY treatment_id
 ORDER BY count(treatment_id) DESC;
 
 -- 3.4
--- HOW MIGHT I KEEP COUNT OF ADMISSIONS AND USE THAT IN DIAGNOSIS 
-SELECT pa.patient_id as "Patient ID", count(pa.patient_ID) as "Times Admitted", pa.diagnosis 
+SELECT pa.patient_id, count(pa.patient_id), pa.diagnosis
 FROM Patient_Admitted pa
 GROUP BY pa.patient_id
-HAVING count(patient_id) >= 2;
+HAVING count(patient_id) >= 2
+ORDER BY count(pa.patient_id) desc;
 
 -- 3.5
-
+SELECT pa.name AS "Patient Name", o.treatment_id AS "Treatment ID", o.doctor_id AS "Doctor who Ordered Treatment (ID)"
+FROM OrderTreatment o
+LEFT JOIN Patient_Admitted p
+ON o.admit_id = p.admit_id
+LEFT JOIN Patient pa
+ON p.patient_id = pa.patient_id
+;
 -- 4.1
--- How might I derive job function and add that to the return without adding to the tables themselves?
-SELECT * 
-FROM EMPLOYEE e
-LEFT JOIN DOCTOR d 
-ON e.employee_id = d.doctor_id
-LEFT JOIN NURSE n
-ON e.employee_id = n.nurse_id
-LEFT JOIN technician t
-ON e.employee_id = t.technician_id
-LEFT JOIN administrator a
-ON e.employee_id = a.administrator_id;
+SELECT *, (case
+when administrator_id != '' then "Admin"
+when doctor_id != '' then "Doctor"
+when nurse_id != '' then "Nurse"
+when technician_id != '' then "Technician"
+else NULL end) as type from
+employee e
+LEFT JOIN doctor d on e.employee_id = d.doctor_id
+LEFT JOIN nurse n on e.employee_id = n.nurse_id
+LEFT JOIN technician t on e.employee_id = t.technician_id
+LEFT JOIN administrator a on e.employee_id = a.administrator_id;
 
 -- 4.2
 SELECT pa.primary_doctor_id as "Primary Doctor ID", count(pa.primary_doctor_id) as "Admissions this Year"
@@ -148,5 +154,3 @@ ON pa.admit_id = pt.admit_id
 LEFT JOIN Administer_Treatment at 
 ON pa.admit_id = at.admit_id
 WHERE pa.admit_id NOT IN (SELECT admit_id FROM Patient_Discharged)
-
-
