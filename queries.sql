@@ -125,11 +125,28 @@ GROUP BY pa.primary_doctor_id
 HAVING count(pa.primary_doctor_id) >= 4;
 
 -- 4.3
-
+SELECT pa.diagnosis as "Dianosis Given", pa.diagnosis_id as "Diagnosis ID", count(pa.diagnosis_id) as "Times Diagnosed"
+FROM Patient_Admitted pa 
+-- GIVEN DOCTOR ID
+WHERE pa.primary_doctor_id = 2
+GROUP BY pa.diagnosis_id
+ORDER BY count(pa.diagnosis_id) DESC;
 
 -- 4.4
+SELECT o.treatment_id as "Treatment ID", count(o.treatment_id) as "Times Ordered" 
+FROM OrderTreatment o
+-- GIVEN DOCTOR ID
+WHERE o.doctor_id = 2
+GROUP BY o.treatment_id
+ORDER BY count(o.treatment_id) DESC;
 
 -- 4.5
-
+SELECT pa.administrator_id AS "Administrator", pa.primary_doctor_id AS "Primary Doctor ID", pt.doctor_id as "Doctor Involved in Treatment ID"
+FROM Patient_Admitted pa
+LEFT JOIN PerformTreatment pt
+ON pa.admit_id = pt.admit_id
+LEFT JOIN Administer_Treatment at 
+ON pa.admit_id = at.admit_id
+WHERE pa.admit_id NOT IN (SELECT admit_id FROM Patient_Discharged)
 
 
