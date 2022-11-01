@@ -67,15 +67,14 @@ WHERE pa.patient_id = 1
 -- GROUP BY pa.admit_id
 ORDER BY t.admit_id DESC, t.treatment_id ASC;
 
-
 -- 2.7 
--- NEEDS TO BE FINISHED 
-SELECT a.patient_id, p.name, a.diagnosis, a.primary_doctor_id, LAG(d.timestamp, 1) OVER (partition by a.patient_id) AS last_discharge_date, a.timestamp AS Admitted_Timestamp
+Select * FROM 
+(SELECT a.patient_id, p.name, a.diagnosis, a.primary_doctor_id as "Admitting Doctor", LAG(d.timestamp, 1) OVER (partition by a.patient_id) AS last_discharge_date, a.timestamp AS Admitted_Timestamp
  FROM patient_admitted a
     LEFT JOIN patient_discharged d ON a.admit_id = d.admit_id
     LEFT JOIN patient p ON p.patient_id = a.patient_id
-    LEFT JOIN primary_doctor pd ON pd.primary_doctor_id = a.primary_doctor_id
-WHERE TIMESTAMPDIFF(DAY, "last_discharge_date", "Admitted_Timestamp") <31;
+    LEFT JOIN primary_doctor pd ON pd.primary_doctor_id = a.primary_doctor_id) table1
+WHERE TIMESTAMPDIFF(DAY, last_discharge_date, Admitted_Timestamp) < 31 AND TIMESTAMPDIFF(DAY, last_discharge_date, Admitted_Timestamp) >0;
 
 -- 2.8 
 -- NEEDS TO BE FINISHED 
