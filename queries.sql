@@ -80,10 +80,8 @@ WHERE TIMESTAMPDIFF(DAY, pa.timestamp, pd.timestamp) <31
 AND 
 TIMESTAMPDIFF(DAY, pa.timestamp, pd.timestamp) >0;
 
-
-
-
 -- 2.8 
+-- NEEDS TO BE FINISHED 
 SELECT 
 	pa.admit_id, pa.patient_id,pa.timestamp AS "Admission Timestamp", pd.timestamp AS "Discharge Timestamp",
 	LEAD(pa.timestamp, 1, 0) OVER(PARTITION BY pa.patient_id) AS "Admission 2 Timestamp", 
