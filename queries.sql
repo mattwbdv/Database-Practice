@@ -69,8 +69,29 @@ ORDER BY t.admit_id DESC, t.treatment_id ASC;
 
 
 -- 2.7 
+SELECT 
+	p.name AS "Name", pa.patient_id AS "Patient ID",pa.diagnosis AS "Diagnosis", pa.primary_doctor_id AS "Admitting Doctor"
+FROM Patient_Admitted pa 
+LEFT JOIN Patient_Discharged pd
+ON pa.admit_id = pd.admit_id
+LEFT JOIN Patient p 
+ON pa.patient_id = p.patient_id
+WHERE TIMESTAMPDIFF(DAY, pa.timestamp, pd.timestamp) <31
+AND 
+TIMESTAMPDIFF(DAY, pa.timestamp, pd.timestamp) >0;
+
+
+
 
 -- 2.8 
+SELECT 
+	pa.admit_id, pa.patient_id,pa.timestamp AS "Admission Timestamp", pd.timestamp AS "Discharge Timestamp",
+	LEAD(pa.timestamp, 1, 0) OVER(PARTITION BY pa.patient_id) AS "Admission 2 Timestamp", 
+    TIMESTAMPDIFF(MONTH, pa.timestamp, LEAD(pa.timestamp, 1, 0) OVER(PARTITION BY pa.patient_id)) AS "Timestamp Diff (Months)" 
+FROM Patient_Admitted pa 
+LEFT JOIN Patient_Discharged pd
+ON pa.admit_id = pd.admit_id
+WHERE (TIMESTAMPDIFF(MONTH, pa.timestamp, LEAD(pa.timestamp, 1, 0) OVER(PARTITION BY pa.patient_id))) >=-5;
 
 -- 3.1
 -- NOTE: I did not use diagnosis ID number in my tables, so I did not provide this ID
@@ -154,3 +175,5 @@ ON pa.admit_id = pt.admit_id
 LEFT JOIN Administer_Treatment at 
 ON pa.admit_id = at.admit_id
 WHERE pa.admit_id NOT IN (SELECT admit_id FROM Patient_Discharged)
+
+
