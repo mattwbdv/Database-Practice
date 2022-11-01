@@ -132,4 +132,8 @@ UPDATE `hospital`.`patient` SET `order_treatment_id` = '5', `administer_treatmen
 -- adding duplicate value for testing 
 INSERT INTO `hospital`.`Patient_Admitted` (`admit_id`, `room_id`, `patient_id`, `timestamp`, `administrator_id`, `primary_doctor_id`, `diagnosis`, `diagnosis_id`, `insurance_id`) VALUES ('4', '1', '2', '2005-12-14 13:06:12', '8', '2', 'Broken Arm', '1', '2');
 INSERT INTO `hospital`.`patient_discharged` (`discharge_id`, `admit_id`, `patient_id`, `timestamp`) VALUES ('3', '4', '2', '2006-06-12 10:06:13');
+UPDATE `hospital`.`patient_admitted` SET `timestamp` = '2022-05-14 13:06:12' WHERE (`admit_id` = '4');
+UPDATE `hospital`.`patient_discharged` SET `timestamp` = '2022-04-10 10:05:12' WHERE (`discharge_id` = '2');
+UPDATE `hospital`.`patient_discharged` SET `timestamp` = '2022-06-12 10:06:13' WHERE (`discharge_id` = '3');
+UPDATE `hospital`.`patient_admitted` SET `timestamp` = '2022-05-05 13:06:12' WHERE (`admit_id` = '4');
 
