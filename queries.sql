@@ -69,16 +69,13 @@ ORDER BY t.admit_id DESC, t.treatment_id ASC;
 
 
 -- 2.7 
-SELECT 
-	p.name AS "Name", pa.patient_id AS "Patient ID",pa.diagnosis AS "Diagnosis", pa.primary_doctor_id AS "Admitting Doctor"
-FROM Patient_Admitted pa 
-LEFT JOIN Patient_Discharged pd
-ON pa.admit_id = pd.admit_id
-LEFT JOIN Patient p 
-ON pa.patient_id = p.patient_id
-WHERE TIMESTAMPDIFF(DAY, pa.timestamp, pd.timestamp) <31
-AND 
-TIMESTAMPDIFF(DAY, pa.timestamp, pd.timestamp) >0;
+-- NEEDS TO BE FINISHED 
+SELECT a.patient_id, p.name, a.diagnosis, a.primary_doctor_id, LAG(d.timestamp, 1) OVER (partition by a.patient_id) AS last_discharge_date, a.timestamp AS Admitted_Timestamp
+ FROM patient_admitted a
+    LEFT JOIN patient_discharged d ON a.admit_id = d.admit_id
+    LEFT JOIN patient p ON p.patient_id = a.patient_id
+    LEFT JOIN primary_doctor pd ON pd.primary_doctor_id = a.primary_doctor_id
+WHERE TIMESTAMPDIFF(DAY, "last_discharge_date", "Admitted_Timestamp") <31;
 
 -- 2.8 
 -- NEEDS TO BE FINISHED 
