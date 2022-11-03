@@ -64,7 +64,6 @@ FROM administer_treatment t
 LEFT JOIN Patient_Admitted pa
 ON t.admit_id = pa.admit_id
 WHERE pa.patient_id = 1
--- GROUP BY pa.admit_id
 ORDER BY t.admit_id DESC, t.treatment_id ASC;
 
 -- 2.7 
@@ -78,14 +77,22 @@ WHERE TIMESTAMPDIFF(DAY, last_discharge_date, Admitted_Timestamp) < 31 AND TIMES
 
 -- 2.8 
 -- NEEDS TO BE FINISHED 
-SELECT 
-	pa.admit_id, pa.patient_id,pa.timestamp AS "Admission Timestamp", pd.timestamp AS "Discharge Timestamp",
-	LEAD(pa.timestamp, 1, 0) OVER(PARTITION BY pa.patient_id) AS "Admission 2 Timestamp", 
-    TIMESTAMPDIFF(MONTH, pa.timestamp, LEAD(pa.timestamp, 1, 0) OVER(PARTITION BY pa.patient_id)) AS "Timestamp Diff (Months)" 
-FROM Patient_Admitted pa 
-LEFT JOIN Patient_Discharged pd
-ON pa.admit_id = pd.admit_id
-WHERE (TIMESTAMPDIFF(MONTH, pa.timestamp, LEAD(pa.timestamp, 1, 0) OVER(PARTITION BY pa.patient_id))) >=-5;
+SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
+
+SELECT patient_id, COUNT(patient_id) as Total_Admissions,
+-- How do I join here to get this?  
+AVG(DATEDIFF(DATE(timestamp), DATE(timestamp))) AS average_span_between_admissions, 
+MIN(DATEDIFF(DATE(next_date), DATE(timestamp))) AS shortest_span, 
+MAX(DATEDIFF(DATE(next_date), DATE(timestamp))) AS longest_span, 
+AVG(DATEDIFF(DATE(next_date), DATE(timestamp))) AS average_span_between_admissions 
+FROM
+    (SELECT patient_admitted.*, LEAD(timestamp) OVER (PARTITION BY patient_id ORDER BY timestamp) AS next_date 
+    FROM patient_admitted
+-- 	LEFT JOIN patient_discharged d
+--     ON d.patient_id = a.patient_id
+    ) a
+GROUP BY patient_id
+
 
 -- 3.1
 -- NOTE: I did not use diagnosis ID number in my tables, so I did not provide this ID
