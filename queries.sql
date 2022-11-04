@@ -76,22 +76,31 @@ Select * FROM
 WHERE TIMESTAMPDIFF(DAY, last_discharge_date, Admitted_Timestamp) < 31 AND TIMESTAMPDIFF(DAY, last_discharge_date, Admitted_Timestamp) >0;
 
 -- 2.8 
--- NEEDS TO BE FINISHED 
-SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
+SELECT * FROM
+    -- COUNT
+    (SELECT p.patient_id, p.name, COUNT(p.patient_id) AS total_admissions FROM patient p 
+    LEFT JOIN patient_admitted a ON a.patient_id = p.patient_id
+    GROUP BY p.patient_id) t1
 
-SELECT patient_id, COUNT(patient_id) as Total_Admissions,
--- How do I join here to get this?  
-AVG(DATEDIFF(DATE(timestamp), DATE(timestamp))) AS average_span_between_admissions, 
-MIN(DATEDIFF(DATE(next_date), DATE(timestamp))) AS shortest_span, 
-MAX(DATEDIFF(DATE(next_date), DATE(timestamp))) AS longest_span, 
-AVG(DATEDIFF(DATE(next_date), DATE(timestamp))) AS average_span_between_admissions 
-FROM
-    (SELECT patient_admitted.*, LEAD(timestamp) OVER (PARTITION BY patient_id ORDER BY timestamp) AS next_date 
-    FROM patient_admitted
--- 	LEFT JOIN patient_discharged d
---     ON d.patient_id = a.patient_id
-    ) a
-GROUP BY patient_id
+LEFT JOIN
+    -- SHORTEST/LONGEST/AVERAGE BETWEEN ADMISSIONS 
+    (SELECT MIN(DATEDIFF(DATE(next_date), DATE(timestamp))) AS shortest_span, 
+    MAX(DATEDIFF(DATE(next_date), DATE(timestamp))) AS longest_span, patient_id, 
+    AVG(DATEDIFF(DATE(next_date), DATE(timestamp))) AS average_span_between_admissions 
+    FROM
+        (SELECT patient_admitted.*, LEAD(timestamp) OVER (PARTITION BY patient_id ORDER BY timestamp) AS next_date
+		FROM patient_admitted) a
+		GROUP BY patient_id) t2
+ON t1.patient_id = t2.patient_id
+
+LEFT JOIN
+    -- AVERAGE LENGTH OF ADMISSION
+    (SELECT patient_id, AVG(TIMESTAMPDIFF(DAY, admission_time, discharge_time)) AS average_duration FROM 
+     (SELECT p.patient_id, p.name, a.admit_id, a.timestamp AS admission_time, d.timestamp AS discharge_time FROM patient p
+    LEFT JOIN patient_admitted a ON a.patient_id = p.patient_id
+    LEFT JOIN patient_discharged d ON d.admit_id = a.admit_id) t3
+     GROUP BY patient_id) t4
+ON t2.patient_id = t4.patient_id;
 
 
 -- 3.1
@@ -176,5 +185,3 @@ ON pa.admit_id = pt.admit_id
 LEFT JOIN Administer_Treatment at 
 ON pa.admit_id = at.admit_id
 WHERE pa.admit_id NOT IN (SELECT admit_id FROM Patient_Discharged)
-
-
