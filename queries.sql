@@ -76,7 +76,7 @@ Select * FROM
 WHERE TIMESTAMPDIFF(DAY, last_discharge_date, Admitted_Timestamp) < 31 AND TIMESTAMPDIFF(DAY, last_discharge_date, Admitted_Timestamp) >0;
 
 -- 2.8 
-SELECT * FROM
+SELECT t1.patient_id, t1.total_admissions, t1.name, t2.shortest_span, t2.longest_span, t2.average_span_between_admissions, t4.average_duration FROM
     -- COUNT
     (SELECT p.patient_id, p.name, COUNT(p.patient_id) AS total_admissions FROM patient p 
     LEFT JOIN patient_admitted a ON a.patient_id = p.patient_id
