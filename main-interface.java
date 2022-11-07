@@ -166,13 +166,16 @@ public class MainInterface {
                         Connection con = DriverManager.getConnection(
                                 "jdbc:mysql://localhost:3306/hospital", "root", "rootpass");
                         Statement stmt = con.createStatement();
+                        // GET DATE TO QUERY BY FROM USER
+                        Scanner scan2 = new Scanner(System.in);
+                        System.out.println("Please enter a start date for the date range (in YYYY-MM-DD format).");
+                        String startdate = scan2.next();
+                        System.out.println("Please enter an end date for the date range (in YYYY-MM-DD format).");
+                        String enddate = scan2.next();
+                        String query = "SELECT p.patient_id AS \"Patient ID\", p.name AS \"Patient Name\" FROM Patient_Discharged pd LEFT JOIN Patient p ON pd.patient_id = p.patient_id WHERE pd.timestamp BETWEEN '"
+                                + startdate + "' AND '" + enddate + "';";
                         ResultSet rs = stmt.executeQuery
-                                ("SELECT p.patient_id AS \"Patient ID\", p.name AS \"Patient Name\"\n" +
-                                        "FROM Patient_Discharged pd\n" +
-                                        "LEFT JOIN Patient p \n" +
-                                        "ON pd.patient_id = p.patient_id\n" +
-                                        "-- GIVEN DATE RANGE \n" +
-                                        "WHERE pd.timestamp BETWEEN '2022-02-01 00:00:00' AND '2022-10-01 00:00:00';");
+                                (query);
                         ResultSetMetaData rsmd = rs.getMetaData();
                         int columnCount = rsmd.getColumnCount();
                         int j = 1;
@@ -196,13 +199,16 @@ public class MainInterface {
                         Connection con = DriverManager.getConnection(
                                 "jdbc:mysql://localhost:3306/hospital", "root", "rootpass");
                         Statement stmt = con.createStatement();
+                        // GET DATE TO QUERY BY FROM USER
+                        Scanner scan2 = new Scanner(System.in);
+                        System.out.println("Please enter a start date for the date range (in YYYY-MM-DD format).");
+                        String startdate = scan2.next();
+                        System.out.println("Please enter an end date for the date range (in YYYY-MM-DD format).");
+                        String enddate = scan2.next();
+                        String query = "SELECT p.patient_id AS \"Patient ID\", p.name AS \"Patient Name\" FROM Patient_Admitted pd LEFT JOIN Patient p ON pd.patient_id = p.patient_id WHERE pd.timestamp BETWEEN '"
+                                + startdate + "' AND '" + enddate + "';";
                         ResultSet rs = stmt.executeQuery
-                                ("SELECT p.patient_id AS \"Patient ID\", p.name AS \"Patient Name\"\n" +
-                                        "FROM Patient_Admitted pd\n" +
-                                        "LEFT JOIN Patient p \n" +
-                                        "ON pd.patient_id = p.patient_id\n" +
-                                        "-- GIVEN DATE RANGE \n" +
-                                        "WHERE pd.timestamp BETWEEN '2011-01-01 00:00:00' AND '2015-01-01 00:00:00';");
+                                (query);
                         ResultSetMetaData rsmd = rs.getMetaData();
                         int columnCount = rsmd.getColumnCount();
                         int j = 1;
