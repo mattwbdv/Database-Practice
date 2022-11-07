@@ -10,4 +10,4 @@ How to use this program:
 9. Open and run the [main interface](https://github.com/permutation-sort/Database-Practice/blob/main/main-interface.java) - you will be able to interact with the program in the text console of the IDE 
 
 
-
+If you have any questions or comments please open a PR or email me at matthewkoenig@acm.org
